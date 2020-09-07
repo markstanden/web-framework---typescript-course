@@ -1,9 +1,15 @@
+import { Eventing } from './Eventing';
+
+const ENV_BASE_URL = 'http://localhost:3000';
 interface UserProps {
-  name?: string;
   age?: number;
+  id?: number;
+  name?: string;
 }
 
 export class User {
+  public events: Eventing = new Eventing();
+
   constructor(private data: UserProps) {}
 
   get(propName: string): number | string {
