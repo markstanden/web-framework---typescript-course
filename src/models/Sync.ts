@@ -1,25 +1,30 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosPromise } from 'axios';
 
-const ENV_BASE_URL = 'http://localhost:3000';
+export interface HasId {
+  id?: number;
+}
 
-export class Sync {
-  fetch(): void {
-    // get the json object (response.data) from the JSOn server,
-    // and then user the User.set() function to assign the
+export class Sync<T extends HasId> {
+  constructor(public rootURL: string);
+
+  fetch(id: number): AxiosPromise {
+    // get the json object (response.data) from the JSON server,
+    // and pass back the promise to the calling class
+    // in our case User can use the User.set() function to assign the
     // server values to the class instance that called it.
-    axios.get(`${ENV_BASE_URL}/users/${this.get('id')}`).then((response: AxiosResponse): void => {
-      this.set(response.data);
-    });
+    return axios.get(`${this.rootURL}/${id}`);
   }
 
-  save(): void {
-    const id = this.get('id');
+  save(data: T): AxiosPromise {
+    // destructuring... const id = data.id;
+    const { id } = data;
+
     if (id) {
       //put request, as user has an id, it must be already on the server.
-      axios.put(`${ENV_BASE_URL}/users/${id}`, this.data);
+      return axios.put(`${this.rootURL}/${id}`, data);
     } else {
-      axios.post(`${ENV_BASE_URL}/users`, this.data);
       //post request, to create a new user entry with the information currently in the user instance.
+      return axios.post(`${this.rootURL}`, data);
     }
   }
 }
