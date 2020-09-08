@@ -5,7 +5,7 @@ export interface HasId {
 }
 
 export class Sync<T extends HasId> {
-  constructor(public rootURL: string);
+  constructor(public rootURL: string) {}
 
   fetch(id: number): AxiosPromise {
     // get the json object (response.data) from the JSON server,
