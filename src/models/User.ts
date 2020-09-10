@@ -29,7 +29,7 @@ export class User extends Model<UserProps> {
     return new User(
       new Attributes<UserProps>(attrs),
       new Eventing(),
-      new ApiSync<UserProps>(rootUrl)
+      new ApiSync<UserProps>(ENV_BASE_URL)
     );
   }
 }
