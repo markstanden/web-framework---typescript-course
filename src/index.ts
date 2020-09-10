@@ -1,20 +1,18 @@
 import { User } from './models/User';
 
 const user = new User({
+  id: 1,
   name: 'Sammy the Snake',
   age: 20,
 });
 
-user.on('change', () => {
-  console.log('User was changed!');
+user.on('saved', () => {
+  console.log(user);
 });
-setTimeout(() => {
-  user.trigger('change');
-}, 3000);
 
-console.log(user.get('name'));
+user.save();
 
-// a quick reminer on accessors
+// a quick reminder on accessors
 // using the get accessor command allows us to call the function without brackets, which makes it look much
 // more like we are accessing a property of the Person class, rather than calling a function.
 /* 
