@@ -1,29 +1,34 @@
-import { User } from './models/User';
+import { Collection } from './models/Collection';
+const collection = new Collection('http://localhost:3000/users');
+collection.fetch();
+console.log(collection.models);
 
-const user = new User({
-  id: 1,
-  name: 'Sammy the Snake',
-  age: 20,
-});
+/* import Axios, { AxiosResponse } from 'axios';
+Axios.get('http://localhost:3000/users').then((response: AxiosResponse) => {
+  console.log(response.data);
+}); */
 
-user.on('saved', () => {
-  console.log(user);
-});
+// import { User } from './models/User';
 
-user.save();
+// const user = User.buildUser({
+//   id: 1,
+//   name: 'test',
+// });
 
-// a quick reminder on accessors
-// using the get accessor command allows us to call the function without brackets, which makes it look much
-// more like we are accessing a property of the Person class, rather than calling a function.
-/* 
+// user.on('save', () => {
+//   console.log('After Save :', user.getAll);
+// });
 
-class Person {
-  constructor(public firstName: string, public lastName: string) {}
-  get getName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
-}
+// user.on('fetch', () => {
+//   setTimeout(() => {
+//     user.isAdminUser ? console.log('Site Admin') : console.log('Basic User');
+//     console.log(`Initial Load: ${user.get('name')}`);
+//     console.log('After Load :', user.getAll);
+//     user.set({ age: 25 });
 
-const person = new Person('Marcus', 'of Invictus');
-console.log(person.getName);
- */
+//     console.log('After Edit :', user.getAll);
+//     user.save();
+//   }, 2000);
+// });
+
+// user.fetch();

@@ -1,9 +1,14 @@
 {
   "users": [
     {
+      "name": "Sammy The Snake",
+      "age": 21,
+      "id": 0
+    },
+    {
       "id": 1,
-      "name": "Sammy the Snake",
-      "age": 20
+      "name": "Sammy The Snake",
+      "age": 19
     },
     {
       "name": "Jo",
@@ -11,7 +16,7 @@
       "id": 2
     },
     {
-      "name": "Ben",
+      "name": "Baby",
       "age": 2,
       "id": 3
     },

@@ -4,6 +4,7 @@ interface ModelAttributes<T> {
   set(update: T): void;
   getAll(): T;
   get<K extends keyof T>(key: K): T[K];
+  data: T;
 }
 
 interface Sync<T> {
@@ -21,7 +22,11 @@ interface HasId {
 }
 
 export class Model<T extends HasId> {
-  constructor(private attributes: ModelAttributes<T>, private events: Events, private sync: Sync<T>) {}
+  constructor(
+    private attributes: ModelAttributes<T>,
+    private events: Events,
+    private sync: Sync<T>
+  ) {}
 
   get on() {
     // Returns a reference to the events.on() function.
@@ -31,7 +36,6 @@ export class Model<T extends HasId> {
     // may need to be changed here too.
     return this.events.on;
   }
-
   get trigger() {
     //as get on() we're just passing a reference here
     return this.events.trigger;
@@ -42,13 +46,19 @@ export class Model<T extends HasId> {
     return this.attributes.get;
   }
 
+  get getAll() {
+    //as get on() we're just passing a reference here
+    //return this.attributes.getAll;
+    return this.attributes.data;
+  }
+
   set(update: T): void {
     this.attributes.set(update);
-    this.events.trigger('change');
+    this.events.trigger('set');
   }
 
   fetch(): void {
-    const id = this.attributes.get('id');
+    const id = this.get('id');
     if (typeof id !== 'number') {
       throw new Error('Cannot fetch without valid id');
     }
@@ -56,13 +66,15 @@ export class Model<T extends HasId> {
     this.sync.fetch(id).then((response: AxiosResponse): void => {
       this.set(response.data);
     });
+
+    this.trigger('fetch');
   }
 
   save(): void {
     this.sync
       .save(this.attributes.getAll())
       .then((response: AxiosResponse): void => {
-        this.trigger('saved');
+        this.trigger('save');
       })
       .catch(() => {
         this.trigger('error');

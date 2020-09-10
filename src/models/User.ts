@@ -25,11 +25,15 @@ const ENV_BASE_URL = 'http://localhost:3000/users';
     USER CLASS
 */
 export class User extends Model<UserProps> {
-  static buildBuild(attrs: UserProps): User {
+  static buildUser(attrs: UserProps): User {
     return new User(
       new Attributes<UserProps>(attrs),
       new Eventing(),
       new ApiSync<UserProps>(ENV_BASE_URL)
     );
+  }
+
+  isAdminUser(): boolean {
+    return this.get('id') === 1;
   }
 }
