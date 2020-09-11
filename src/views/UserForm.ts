@@ -1,19 +1,33 @@
 import { User } from '../models/User';
 
 export class UserForm {
-  constructor(public parent: Element, public model: User) {}
+  constructor(public parent: Element, public model: User) {
+    this.bindModel();
+  }
 
+  bindModel() {
+    this.model.on('change', () => {
+      this.render();
+    });
+  }
   eventsMap(): { [key: string]: () => void } {
     return {
-      'click:.button_click-me': this.onButtonClickMe,
+      'click:.button_update_name': this.onButtonUpdateName,
       'click:.button_random-age': this.onButtonRandomAge,
       'mouseover:.title_main': this.onHoverTitle,
     };
   }
 
-  onButtonClickMe = (): void => {
-    console.log('Click Me Button Clicked');
+  onButtonUpdateName = (): void => {
+    const inputValue: HTMLInputElement | null = this.parent.querySelector(
+      '.input_change_name'
+    );
+
+    if (inputValue) {
+      this.model.set({ name: inputValue.value });
+    }
   };
+
   onButtonRandomAge = (): void => {
     console.log('Random Age Button Clicked');
     this.model.setRandomAge();
@@ -38,8 +52,8 @@ export class UserForm {
         'age'
       )}</strong></div>
       <br><hr><br>
-      <input class="input_desc" placeholder="Enter Description"/>
-      <button class="button_click-me">Click Me</button>
+      <input class="input_change_name" placeholder="Enter new name here..."/>
+      <button class="button_update_name">Update Name</button>
       <button class="button_random-age">Set Random Age</button>
       <br><br><hr>
     </div>
@@ -57,6 +71,7 @@ export class UserForm {
   }
 
   render(): void {
+    this.parent.innerHTML = '';
     const templateElement = document.createElement('template');
     templateElement.innerHTML = this.template();
 
