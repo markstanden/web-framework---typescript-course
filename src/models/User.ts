@@ -2,6 +2,7 @@
     IMPORTS
 */
 import { Model } from './Model';
+import { Collection } from './Collection';
 import { Attributes } from './Attributes';
 import { ApiSync } from './ApiSync';
 import { Eventing } from './Eventing';
@@ -30,6 +31,11 @@ export class User extends Model<UserProps> {
       new Attributes<UserProps>(attrs),
       new Eventing(),
       new ApiSync<UserProps>(ENV_BASE_URL)
+    );
+  }
+  static buildUserCollection(): Collection<User, UserProps> {
+    return new Collection<User, UserProps>(ENV_BASE_URL, (json: UserProps) =>
+      User.buildUser(json)
     );
   }
 
