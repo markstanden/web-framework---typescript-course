@@ -39,7 +39,8 @@ export class User extends Model<UserProps> {
     );
   }
 
-  isAdminUser(): boolean {
-    return this.get('id') === 1;
+  setRandomAge(): void {
+    const age = Math.ceil(Math.random() * 100);
+    this.set({ age });
   }
 }
